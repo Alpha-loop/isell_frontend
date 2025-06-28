@@ -65,7 +65,7 @@ const ShippingQuoteForm = () => {
   };
 
   return (
-    <div className="w-full p-4 sm:p-6">
+    <div className="w-full md:w-150 p-4 sm:p-6">
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-4 sm:p-6 md:p-8">
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -79,7 +79,7 @@ const ShippingQuoteForm = () => {
             {/* From Section */}
             <div className="space-y-2">
               <h2 className="text-base sm:text-lg font-medium text-gray-700">From</h2>
-              <div className="flex flex-col gap-3 sm:gap-4">
+              <div className="flex md:flex-row gap-3 sm:gap-4">
                 <div className="flex-1">
                   <input
                     type="text"
@@ -108,7 +108,7 @@ const ShippingQuoteForm = () => {
             {/* Delivery Country Section */}
             <div className="space-y-2">
               <h2 className="text-base sm:text-lg font-medium text-gray-700">Delivery Country</h2>
-              <div className="flex flex-col gap-3 sm:gap-4">
+              <div className="flex md:flex-row gap-3 sm:gap-4">
                 <div className="flex-1">
                   <input
                     type="text"
