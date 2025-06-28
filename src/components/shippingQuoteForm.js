@@ -46,7 +46,7 @@ const ShippingQuoteForm = () => {
     console.log('Sending:', { origin, destination, weight, dimensions: 'N/A' });
 
     try {
-      const response = await axios.post('http://localhost:5000/api/shipping-quote', {
+      const response = await axios.post('https://isell-backend.vercel.app/api/shipping-quote', {
         origin,
         destination,
         weight,
