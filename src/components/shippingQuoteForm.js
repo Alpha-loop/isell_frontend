@@ -51,6 +51,14 @@ const ShippingQuoteForm = () => {
         destination,
         weight,
         dimensions: 'N/A',
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          // Add if your backend requires these
+          // 'Accept': 'application/json',
+          // 'Access-Control-Allow-Origin': '*'
+        },
+        withCredentials: true // if using cookies/auth
       });
       console.log('Response:', response.data);
       router.push(
