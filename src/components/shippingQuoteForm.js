@@ -96,9 +96,9 @@ const ShippingQuoteForm = () => {
         <div className="p-4 sm:p-6 md:p-8">
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             {/* Info Message */}
-            <div className="bg-blue-50 text-blue-600 p-3 rounded-md text-sm">
+            {/* <div className="bg-blue-50 text-blue-600 p-3 rounded-md text-sm">
               We currently ship between: Nigeria, Canada, USA, and UK
-            </div>
+            </div> */}
 
             {error && (
               <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm">
