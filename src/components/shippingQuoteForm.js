@@ -1,11 +1,10 @@
-"use client";
+'use client'
 
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-const ShippingQuoteForm = () => {
-  // Allowed countries and their cities
+const ShippingQuoteForm = ({ redirectPath }) => {
   const allowedCountries = {
     'Nigeria': ['Lagos', 'Abuja', 'Port Harcourt', 'Kano'],
     'Canada': ['Toronto', 'Vancouver', 'Montreal', 'Calgary'],
@@ -30,7 +29,6 @@ const ShippingQuoteForm = () => {
     setFormData(prev => ({
       ...prev,
       [name]: value,
-      // Reset city when country changes
       ...((name === 'fromCountry' || name === 'deliveryCountry') && {
         [`${name.split('Country')[0]}City`]: ''
       })
@@ -42,7 +40,6 @@ const ShippingQuoteForm = () => {
     setLoading(true);
     setError(null);
 
-    // Frontend validation
     if (!formData.fromCountry || !formData.fromCity || 
         !formData.deliveryCountry || !formData.deliveryCity || 
         !formData.weightKG || formData.weightKG <= 0) {
@@ -70,8 +67,7 @@ const ShippingQuoteForm = () => {
         }
       );
 
-      // Navigate to result page
-      router.push(`/quoteResult?${
+      router.push(`${redirectPath}?${
         new URLSearchParams({
           origin: encodeURIComponent(origin),
           destination: encodeURIComponent(destination),
@@ -85,37 +81,30 @@ const ShippingQuoteForm = () => {
     } catch (err) {
       console.error('Error:', err.response?.data || err.message);
       setError(err.response?.data?.error || 'Failed to fetch quote. Please try again.');
-    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full md:w-150 p-4 sm:p-6">
+    <div className="w-full max-w-md sm:max-w-lg p-4 sm:p-6 box-border">
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="p-4 sm:p-6 md:p-8">
+        <div className="p-4 sm:p-6">
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-            {/* Info Message */}
-            {/* <div className="bg-blue-50 text-blue-600 p-3 rounded-md text-sm">
-              We currently ship between: Nigeria, Canada, USA, and UK
-            </div> */}
-
             {error && (
               <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm">
                 {error}
               </div>
             )}
 
-            {/* Origin Section */}
             <div className="space-y-2">
-              <h2 className="text-base sm:text-lg font-medium text-gray-700">From</h2>
-              <div className="flex md:flex-row gap-3 sm:gap-4">
+              <h2 className="text-sm sm:text-base font-medium text-gray-700">From</h2>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <div className="flex-1">
                   <select
                     name="fromCountry"
                     value={formData.fromCountry}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                     required
                   >
                     <option value="">Select Country</option>
@@ -130,7 +119,7 @@ const ShippingQuoteForm = () => {
                     value={formData.fromCity}
                     onChange={handleChange}
                     disabled={!formData.fromCountry}
-                    className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                     required
                   >
                     <option value="">Select City</option>
@@ -144,16 +133,15 @@ const ShippingQuoteForm = () => {
               </div>
             </div>
 
-            {/* Destination Section */}
             <div className="space-y-2">
-              <h2 className="text-base sm:text-lg font-medium text-gray-700">To</h2>
-              <div className="flex md:flex-row gap-3 sm:gap-4">
+              <h2 className="text-sm sm:text-base font-medium text-gray-700">To</h2>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <div className="flex-1">
                   <select
                     name="deliveryCountry"
                     value={formData.deliveryCountry}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                     required
                   >
                     <option value="">Select Country</option>
@@ -168,7 +156,7 @@ const ShippingQuoteForm = () => {
                     value={formData.deliveryCity}
                     onChange={handleChange}
                     disabled={!formData.deliveryCountry}
-                    className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                     required
                   >
                     <option value="">Select City</option>
@@ -182,9 +170,8 @@ const ShippingQuoteForm = () => {
               </div>
             </div>
 
-            {/* Weight Section */}
             <div className="space-y-2">
-              <h2 className="text-base sm:text-lg font-medium text-gray-700">Weight (KG)</h2>
+              <h2 className="text-sm sm:text-base font-medium text-gray-700">Weight (KG)</h2>
               <input
                 type="number"
                 name="weightKG"
@@ -193,7 +180,7 @@ const ShippingQuoteForm = () => {
                 placeholder="e.g., 2.5"
                 min="0.1"
                 step="0.1"
-                className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
+                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                 required
               />
             </div>
@@ -201,7 +188,7 @@ const ShippingQuoteForm = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 sm:py-3 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-400"
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-400"
             >
               {loading ? 'Fetching Quote...' : 'Get a Quote'}
             </button>
