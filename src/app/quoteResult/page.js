@@ -235,14 +235,14 @@
 
 'use client'
 
-import React from 'react';
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import React, { Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Header from '@/components/header';
 import MenuToggle from '@/components/MenuToggle';
 
-const QuoteResult = ({ isNavOpen, setIsNavOpen }) => {
+// Component for the page content
+function QuoteResultContent({ isNavOpen, setIsNavOpen }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -255,9 +255,9 @@ const QuoteResult = ({ isNavOpen, setIsNavOpen }) => {
 
   return (
     <div className="w-full max-w-full box-border overflow-x-hidden">
-      {/* <MenuToggle isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} /> */}
+      <MenuToggle isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
       <div className="p-3 sm:p-6 w-full max-w-full box-border">
-        {/* <Header /> */}
+        <Header />
         <h1 className="text-lg sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-6 w-full max-w-full">Shipping Quote</h1>
         <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 w-full max-w-full box-border">
           <div className="space-y-4">
@@ -319,6 +319,17 @@ const QuoteResult = ({ isNavOpen, setIsNavOpen }) => {
       </div>
     </div>
   );
-};
+}
 
-export default QuoteResult;
+// Main page component with Suspense boundary
+export default function QuoteResult({ isNavOpen, setIsNavOpen }) {
+  return (
+    <Suspense fallback={
+      <div className="w-full max-w-full box-border overflow-x-hidden flex items-center justify-center h-screen">
+        <div className="animate-pulse text-lg text-gray-600">Loading shipping quote...</div>
+      </div>
+    }>
+      <QuoteResultContent isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
+    </Suspense>
+  );
+}
