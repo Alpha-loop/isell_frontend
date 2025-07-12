@@ -1,12 +1,14 @@
+
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Header from '@/components/header';
 import MenuToggle from '@/components/MenuToggle';
 
-const QuoteResults = ({ isNavOpen, setIsNavOpen }) => {
+// Component for the page content
+function QuoteResultsContent({ isNavOpen, setIsNavOpen }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -202,6 +204,17 @@ const QuoteResults = ({ isNavOpen, setIsNavOpen }) => {
       </div>
     </div>
   );
-};
+}
 
-export default QuoteResults;
+// Main page component with Suspense boundary
+export default function QuoteResults({ isNavOpen, setIsNavOpen }) {
+  return (
+    <Suspense fallback={
+      <div className="w-full max-w-full box-border overflow-x-hidden flex items-center justify-center h-screen">
+        <div className="animate-pulse text-lg text-gray-600">Loading shipping quotes...</div>
+      </div>
+    }>
+      <QuoteResultsContent isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
+    </Suspense>
+  );
+}
