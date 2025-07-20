@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-// import { registerUser } from '@/actions/auth';
+// Import the authService we created
+import { register } from '../../api/authService'; // Adjust the path based on your project structure
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -36,9 +37,14 @@ export default function RegisterForm() {
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords must match';
     }
-    if (!formData.firstName.trim()) {
+    if (!formData.firstName.trim()) { // Added trim to ensure it's not just whitespace
       newErrors.firstName = 'First name required';
     }
+    // You might want to add validation for lastName too if it's required by your backend
+    // if (!formData.lastName.trim()) {
+    //   newErrors.lastName = 'Last name required';
+    // }
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -49,16 +55,34 @@ export default function RegisterForm() {
     if (!validate()) return;
 
     setIsSubmitting(true);
+    setErrors({}); // Clear API errors before new submission
+
     try {
-      const result = await registerUser(formData);
+      // Call the register method from authService
+      // Your backend's registerUser endpoint expects:
+      // { email, firstName, lastName, password }
+      const response = await register({
+        email: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+      });
       
-      if (result?.error) {
-        setErrors({ api: result.error });
-      } else {
-        router.push('/dashboard');
-      }
+      // Assuming successful registration doesn't return an 'error' property
+      // but rather a success message or redirects
+      console.log('Registration successful:', response);
+      // You might want to show a success message before redirecting
+      // or redirect directly based on your UX flow.
+      router.push('/dashboard'); // Or '/login' if you want them to log in after registering
+      
     } catch (error) {
-      setErrors({ api: error.message });
+      console.error('Registration failed:', error);
+      // The axiosInstance.interceptors.response.use handles common HTTP errors.
+      // For specific backend validation errors, your backend should send
+      // a structured error response (e.g., { message: 'Email already exists' })
+      const apiErrorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
+      setErrors({ api: apiErrorMessage });
     } finally {
       setIsSubmitting(false);
     }

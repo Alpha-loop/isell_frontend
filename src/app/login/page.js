@@ -3,20 +3,51 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation'; // Import useRouter for navigation
+
+// Import the authService
+import { login } from '../../api/authService'; // Adjust the path based on your project structure
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(''); // State to hold API errors
+  const [isSubmitting, setIsSubmitting] = useState(false); // State for loading indicator
+  const router = useRouter(); // Initialize useRouter
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => { // Make handleSubmit async
     e.preventDefault();
-    // Frontend-only validation for now
+    setError(''); // Clear previous errors
+    
+    // Frontend validation
     if (!email || !password) {
-      alert('Please fill in all fields');
+      setError('Please fill in both email and password.');
       return;
     }
-    console.log('Login attempt with:', { email, password });
-    // Backend integration will go here later
+
+    setIsSubmitting(true); // Set loading state to true
+
+    try {
+      // Call the login method from authService
+      const data = await login({ email, password });
+      
+      console.log('Login successful:', data);
+      if (data) {
+        localStorage.setItem('userToken', data.token);
+      } else {
+        console.warn('Login response did not contain a token. Check backend response structure.');
+      }
+
+      router.push('/'); 
+
+    } catch (err) {
+      console.error('Login error:', err);
+      // Extract error message from backend response
+      const apiErrorMessage = err.response?.data?.message || 'Login failed. Please check your credentials.';
+      setError(apiErrorMessage);
+    } finally {
+      setIsSubmitting(false); // Reset loading state
+    }
   };
 
   const btnStyles = {
@@ -37,6 +68,12 @@ export default function LoginPage() {
                     Ship globally from Nigeria, effortlessly. Log in to iselllogistics<br/> and connect to over 750 countries.
                 </p>
 
+                {error && ( // Display API errors here
+                    <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+                        {error}
+                    </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-4 mt-10">
                     <div>
                     <label htmlFor="email" className="block text-24 font-normal text-black">Email</label>
@@ -46,11 +83,12 @@ export default function LoginPage() {
                         name="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className={`mt-1 block w-full px-3 py-2 border ${!email ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 h-13`}
+                        className={`mt-1 block w-full px-3 py-2 border ${error && !email ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 h-13`}
                         placeholder="youremail@gmail.com"
                         style={lightBg}
                     />
-                    {!email && <p className="mt-1 text-sm text-red-600">{!email}</p>}
+                    {/* The !email check below is a bit redundant if you have a single error message for both fields */}
+                    {/* {!email && <p className="mt-1 text-sm text-red-600">{!email}</p>} */}
                     </div>
 
                     <div className="mt-8">
@@ -61,37 +99,24 @@ export default function LoginPage() {
                         name="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className={`mt-1 block w-full px-3 py-2 border ${!password ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-[ #D3FFCD] h-13`}
+                        className={`mt-1 block w-full px-3 py-2 border ${error && !password ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-[ #D3FFCD] h-13`}
                         placeholder="••••••••"
                         style={lightBg}
                         />
-                        {!password && <p className="mt-1 text-sm text-red-600">{!password}</p>}
+                        {/* {!password && <p className="mt-1 text-sm text-red-600">{!password}</p>} */}
                         <Link href="/forgetPassword" className="font-normal text-black hover:text-blue-500 float-right">
                             Forget password?
                         </Link>
                     </div>
 
-                    {/* <div className="flex items-center mt-8">
-                    <input
-                        type="checkbox"
-                        id="terms"
-                        name="terms"
-                        className="h-8 w-8 text-blue-600 focus:ring-blue-500 rounded ring-green-300"
-                        required
-                    />
-                    <label htmlFor="terms" className="ml-2 block text-14 text-gray-700">
-                        By Creating an Account you agree with our <a href="#" className="text-black font-bold">Terms and <br/>Conditions & Privacy Policy</a>
-                    </label>
-                    </div> */}
-
                     <button
                     type="submit"
+                    disabled={isSubmitting} // Disable button while submitting
                     className="w-full h-13 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-[ #03E418] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed items-center mt-15"
                     style={btnStyles}
                     >
-                        <Link href="/login" className="font-bold text-black hover:text-blue-500 underline">
-                            Login
-                        </Link>
+                        {isSubmitting ? 'Logging in...' : 'Login'} {/* Change button text based on loading state */}
+                        {/* Removed <Link> inside <button> - this is generally not good practice for form submission buttons */}
                     </button>
                 </form>
 
@@ -113,85 +138,5 @@ export default function LoginPage() {
             />
         </div>
     </main>
-    // <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    //   <div className="sm:mx-auto sm:w-full sm:max-w-md">
-    //     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-    //       Log in to your account
-    //     </h2>
-    //     <p className="mt-2 text-center text-sm text-gray-600 max-w">
-    //       Ship globally from Nigeria, effortlessly. Log in to Selllogistics and connect to over 750 countries.
-    //     </p>
-    //   </div>
-
-    //   <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-    //     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-    //       <form className="space-y-6" onSubmit={handleSubmit}>
-    //         <div>
-    //           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-    //             Email
-    //           </label>
-    //           <div className="mt-1">
-    //             <input
-    //               id="email"
-    //               name="email"
-    //               type="email"
-    //               autoComplete="email"
-    //               placeholder="youremail@gmail.com"
-    //               required
-    //               value={email}
-    //               onChange={(e) => setEmail(e.target.value)}
-    //               className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-    //             />
-    //           </div>
-    //         </div>
-
-    //         <div>
-    //           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-    //             Password
-    //           </label>
-    //           <div className="mt-1">
-    //             <input
-    //               id="password"
-    //               name="password"
-    //               type="password"
-    //               autoComplete="current-password"
-    //               placeholder="***********"
-    //               required
-    //               value={password}
-    //               onChange={(e) => setPassword(e.target.value)}
-    //               className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-    //             />
-    //           </div>
-    //         </div>
-
-    //         <div className="flex items-center justify-end">
-    //           <div className="text-sm">
-    //             <Link href="/forgot-password" className="font-medium text-green-600 hover:text-green-500">
-    //               Forgot Password?
-    //             </Link>
-    //           </div>
-    //         </div>
-
-    //         <div>
-    //           <button
-    //             type="submit"
-    //             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-    //           >
-    //             Login
-    //           </button>
-    //         </div>
-    //       </form>
-
-    //       <div className="mt-6 text-center text-sm">
-    //         <p className="text-gray-600">
-    //           New to Selllogistics?{' '}
-    //           <Link href="/register" className="font-medium text-green-600 hover:text-green-500">
-    //             Register here
-    //           </Link>
-    //         </p>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }

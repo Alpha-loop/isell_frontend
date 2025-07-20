@@ -1,11 +1,12 @@
-// import { Geist, Geist_Mono } from "next/font/google";
+// src/app/layout.js
 import { Poppins } from 'next/font/google';
 import "./globals.css";
+import AuthWrapper from '../components/authWrapper'; // Import the new wrapper
 
 const poppins = Poppins({
-  weight: ['400', '500', '600', '700'], // Specify weights you need
-  subsets: ['latin'], // Subsets for your language (latin is common)
-  display: 'swap', // Ensures text is visible while font loads
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata = {
@@ -23,10 +24,10 @@ export default function RootLayout({ children }) {
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body
-        className={poppins.className}
-      >
-        {children}
+      <body className={poppins.className}>
+        <AuthWrapper> {/* Wrap your children with the AuthWrapper */}
+          {children}
+        </AuthWrapper>
       </body>
     </html>
   );
