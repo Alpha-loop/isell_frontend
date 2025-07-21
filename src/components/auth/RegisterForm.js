@@ -74,7 +74,7 @@ export default function RegisterForm() {
       console.log('Registration successful:', response);
       // You might want to show a success message before redirecting
       // or redirect directly based on your UX flow.
-      router.push('/dashboard'); // Or '/login' if you want them to log in after registering
+      router.push('/'); // Or '/login' if you want them to log in after registering
       
     } catch (error) {
       console.error('Registration failed:', error);

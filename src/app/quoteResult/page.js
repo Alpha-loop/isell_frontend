@@ -255,10 +255,8 @@ function QuoteResultContent({ isNavOpen, setIsNavOpen }) {
 
   return (
     <div className="w-full max-w-full box-border overflow-x-hidden">
-      <MenuToggle isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
       <div className="p-3 sm:p-6 w-full max-w-full box-border">
-        <Header />
-        <h1 className="text-lg sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-6 w-full max-w-full">Shipping Quote</h1>
+        {/* <h1 className="text-lg sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-6 w-full max-w-full">Shipping Quote</h1> */}
         <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 w-full max-w-full box-border">
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b border-gray-300 pb-3">

@@ -11,7 +11,7 @@ const GetQoute = ({ isNavOpen, setIsNavOpen }) => {
       {/* <MenuToggle isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} /> */}
       <div className="p-3 sm:p-6 w-full max-w-full box-border">
         {/* <Header /> */}
-        <h1 className="text-lg sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-6 w-full max-w-full">Get a Quote</h1>
+        {/* <h1 className="text-lg sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-6 w-full max-w-full">Get a Quote</h1> */}
         <div className="flex items-center justify-center">
           <ShippingQuoteForm redirectPath="/quoteResult" />
         </div>

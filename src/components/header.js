@@ -1,4 +1,4 @@
-export default function Header () {
+export default function Header ({ userprofile }) {
     return (
         <header className="flex justify-end items-center mb-8 flex-wrap">
           <div className="flex items-center space-x-4">
@@ -17,7 +17,7 @@ export default function Header () {
                 className="w-10 h-10 rounded-full"
               />
               <div>
-                <div className="font-semibold text-gray-800">Hello, Sam</div>
+                <div className="font-semibold text-gray-800">Hello, {userprofile.firstName}</div>
                 <div className="text-xs text-gray-500">2/6/2025</div>
               </div>
             </div>
