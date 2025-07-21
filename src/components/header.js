@@ -17,7 +17,7 @@ export default function Header ({ userProfile }) {
                 className="w-10 h-10 rounded-full"
               />
               <div>
-                <div className="font-semibold text-gray-800">Hello, {userProfile.firstName}</div>
+                <div className="font-semibold text-gray-800">Hello</div>
                 <div className="text-xs text-gray-500">2/6/2025</div>
               </div>
             </div>
