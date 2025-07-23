@@ -25,11 +25,6 @@ export default function NavBar({ activePage, setActivePage, isNavOpen, setIsNavO
       icon: '/images/BellRinging.jpg'
     },
     {
-      name: 'Wallet',
-      path: '/wallet',
-      icon: '/images/Wallet.jpg'
-    },
-    {
       name: 'Addresses',
       path: '/addresses',
       icon: '/images/MapPinLine.jpg'
@@ -37,7 +32,7 @@ export default function NavBar({ activePage, setActivePage, isNavOpen, setIsNavO
     {
       name: 'Get Quotes',
       path: '/getQuotes',
-      icon: '/images/Quote.jpg'
+      icon: '/images/Wallet.jpg'
     }
   ];
 

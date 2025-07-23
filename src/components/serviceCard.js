@@ -1,6 +1,6 @@
 const ServiceCard = ({ icon, title, description, isPrimary = false }) => {
   const cardClasses = `p-6 rounded-lg shadow-md flex flex-col items-start ${
-    isPrimary ? 'bg-gradient-to-r from-green-400 to-green-600 text-white' : 'bg-white text-gray-800'
+    isPrimary ? 'hover:bg-gradient-to-r from-green-400 to-green-600 text-white' : 'bg-white text-gray-800'
   } transform transition duration-300 hover:scale-105`;
 
   return (
@@ -10,7 +10,7 @@ const ServiceCard = ({ icon, title, description, isPrimary = false }) => {
         {icon}
       </div>
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className={`text-sm ${isPrimary ? 'text-white' : 'text-gray-600'}`}>{description}</p>
+      <p className={`text-sm ${!isPrimary ? 'hover:text-white' : 'text-gray-600'}`}>{description}</p>
     </div>
   );
 };

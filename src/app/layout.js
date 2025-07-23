@@ -2,6 +2,7 @@
 import { Poppins } from 'next/font/google';
 import "./globals.css";
 import AuthWrapper from '../components/authWrapper'; // Import the new wrapper
+import NextTopLoader from 'nextjs-toploader';
 
 const poppins = Poppins({
   weight: ['400', '500', '600', '700'],
@@ -26,6 +27,17 @@ export default function RootLayout({ children }) {
       </head>
       <body className={poppins.className}>
         <AuthWrapper> {/* Wrap your children with the AuthWrapper */}
+          <NextTopLoader
+            color="#2299DD" // Customize the color
+            initialPosition={0.08}
+            crawlSpeed={200}
+            height={3}
+            crawl={true}
+            showSpinner={false} // Often good to hide the default spinner
+            easing="ease"
+            speed={200}
+            shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+          />
           {children}
         </AuthWrapper>
       </body>

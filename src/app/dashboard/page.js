@@ -38,9 +38,9 @@ const OverviewCard = ({ icon, value, label, isWallet = false }) => {
 const Dashboard = ({ isNavOpen, setIsNavOpen }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const images = [
-    { src: 'https://placehold.co/600x200/ADD8E6/000000?text=Get+it+delivered+Globally', alt: 'Global Delivery' },
-    { src: 'https://placehold.co/600x200/90EE90/000000?text=Fast+and+Reliable', alt: 'Fast Delivery' },
-    { src: 'https://placehold.co/600x200/FFD700/000000?text=Secure+Shipping', alt: 'Secure Shipping' },
+    { src: '/images/Iselllogistics c.jpg', alt: 'Global Delivery' },
+    { src: '/images/Iselllogistics.jpg', alt: 'Fast Delivery' },
+    { src: '/images/IselllogisticsB.jpg', alt: 'Secure Shipping' },
   ];
 
   // States to hold data fetched from the backend
